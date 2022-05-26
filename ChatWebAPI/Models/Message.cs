@@ -12,9 +12,6 @@ namespace ChatWebAPI.Models
         public bool Sent { get; set; }
         public DateTime Created { get; set; }
 
-        public int UserId { get; set; }   
-        public string ContactId { get; set; }
-
 
     }
 }
