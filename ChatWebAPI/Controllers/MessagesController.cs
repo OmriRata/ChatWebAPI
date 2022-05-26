@@ -98,35 +98,30 @@ namespace ChatWebAPI.Controllers
             return message; 
         }
 
-        // GET: api/Message/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Message>> GetMessage(int id)
-        {
-          if (_context.Message == null)
-          {
-              return NotFound();
-          }
-            var message = await _context.Message.FindAsync(id);
-
-            if (message == null)
-            {
-                return NotFound();
-            }
-
-            return message;
-        }
 
         // PUT: api/Message/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutMessage(int id, Message message)
+        [HttpPut("/api/contacts/{contact}/messages/{id}")]
+        public async Task<IActionResult> PutMessage(string contact, int id, Message message)
         {
+            var connectUser = 2;
             if (id != message.Id)
             {
                 return BadRequest();
             }
-
-            _context.Entry(message).State = EntityState.Modified;
+            var _contact = await _context.Contact.Include(x => x.Messages).Where(x => x.Id == contact && x.UserId == connectUser).FirstOrDefaultAsync();
+            if (_contact == null)
+            {
+                return BadRequest();
+            }
+            var messageOrig = _contact.Messages.Where(x => x.Id == id).FirstOrDefault();
+            if (messageOrig == null)
+            {
+                return BadRequest();
+            }
+            messageOrig.Created = message.Created;
+            messageOrig.Content = message.Content;
+            _context.Entry(messageOrig).State = EntityState.Modified;
 
             try
             {
