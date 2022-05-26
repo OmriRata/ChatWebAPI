@@ -143,14 +143,21 @@ namespace ChatWebAPI.Controllers
         }
 
         // DELETE: api/Message/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteMessage(int id)
+        [HttpDelete("/api/contacts/{contact}/messages/{id}")]
+        public async Task<IActionResult> DeleteMessage(string contact, int id)
         {
+            var connectUser = 2;
+
             if (_context.Message == null)
             {
                 return NotFound();
             }
-            var message = await _context.Message.FindAsync(id);
+            var _contact = await _context.Contact.Include(x => x.Messages).Where(x => x.Id == contact && x.UserId == connectUser).FirstOrDefaultAsync();
+            if (_contact == null)
+            {
+                return BadRequest();
+            }
+            var message = _contact.Messages.Where(x => x.Id == id).FirstOrDefault();
             if (message == null)
             {
                 return NotFound();
