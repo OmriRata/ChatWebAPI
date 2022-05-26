@@ -3,6 +3,7 @@ using System;
 using ChatWebAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ChatWebAPI.Migrations
 {
     [DbContext(typeof(ChatWebAPIContext))]
-    partial class ChatWebAPIContextModelSnapshot : ModelSnapshot
+    [Migration("20220526005455_init")]
+    partial class init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.5");
@@ -55,7 +57,10 @@ namespace ChatWebAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("ContactId")
+                    b.Property<int>("Contact")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("ContactId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Content")
@@ -111,13 +116,9 @@ namespace ChatWebAPI.Migrations
 
             modelBuilder.Entity("ChatWebAPI.Models.Message", b =>
                 {
-                    b.HasOne("ChatWebAPI.Models.Contact", "Contact")
+                    b.HasOne("ChatWebAPI.Models.Contact", null)
                         .WithMany("Messages")
-                        .HasForeignKey("ContactId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Contact");
+                        .HasForeignKey("ContactId");
                 });
 
             modelBuilder.Entity("ChatWebAPI.Models.Contact", b =>

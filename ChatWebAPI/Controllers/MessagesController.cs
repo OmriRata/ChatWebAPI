@@ -32,22 +32,71 @@ namespace ChatWebAPI.Controllers
             return await _context.Message.ToListAsync();
         }
 
-/*
+
         // GET: api/Message
         [HttpGet("/api/contacts/{id}/messages")]
         public async Task<ActionResult<IEnumerable<Message>>> GetMessageByContact(string id)
         {
+            var connectUser = 1;
             if (_context.Message == null)
             {
                 return NotFound();
             }
-            int currentUserID = 2;
+            //int currentUserID = 2;
+            var contact = await _context.Contact.Include(x => x.Messages).Where(x => x.Id == id && x.UserId == connectUser).FirstOrDefaultAsync();
+            if (contact == null)
+            {
+                return NotFound();
 
-            //var messages = await _context.Message.Where(x => x.ContactId1 == id && x.UserId==currentUserID).ToListAsync();
+            }
+            var messages = await _context.Message.Where(x => x.Contact.ContactId == contact.ContactId).ToListAsync();
 
-            return _;
-        }*/
+            return messages;
+        }
 
+        // Post : api/Message
+        [HttpPost("/api/contacts/{id}/messages")]
+        public async Task<ActionResult<IEnumerable<Message>>> PostMessageByContact(string id,Message message)
+        {
+            var connectUser = 1;
+            if (_context.Message == null)
+            {
+                return Problem("Entity set 'ChatWebAPIContext.Message'  is null.");
+            }
+            var contact = await _context.Contact.Include(x => x.Messages).Where(x => x.Id == id && x.UserId == connectUser).FirstOrDefaultAsync();
+            if (contact == null)
+            {
+                return NotFound();
+
+            }
+            contact.Messages.Add(message);
+            await _context.SaveChangesAsync();
+            return CreatedAtAction("GetMessage", new { id = message.Id }, message);
+        }
+
+        [HttpGet("/api/contacts/{contact}/messages/{id}")]
+        public async Task<ActionResult<Message>> GetMessageByID(string contact,int id)
+        {
+            var connectUser = 1;
+            if (_context.Message == null)
+            {
+                return NotFound();
+            }
+            //int currentUserID = 2;
+            var _contact = await _context.Contact.Include(x => x.Messages).Where(x => x.Id == contact && x.UserId == connectUser).FirstOrDefaultAsync();
+            if (_contact == null)
+            {
+                return NotFound();
+
+            }
+            var message = _contact.Messages.Where(x=>x.Id == id).FirstOrDefault();
+            if (message == null)
+            {
+                return NotFound();
+
+            }
+            return message; 
+        }
 
         // GET: api/Message/5
         [HttpGet("{id}")]
@@ -96,21 +145,6 @@ namespace ChatWebAPI.Controllers
             }
 
             return NoContent();
-        }
-
-        // POST: api/Message
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Message>> PostMessage(Message message)
-        {
-          if (_context.Message == null)
-          {
-              return Problem("Entity set 'ChatWebAPIContext.Message'  is null.");
-          }
-            _context.Message.Add(message);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetMessage", new { id = message.Id }, message);
         }
 
         // DELETE: api/Message/5

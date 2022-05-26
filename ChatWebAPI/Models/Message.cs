@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace ChatWebAPI.Models
 {
@@ -11,7 +12,8 @@ namespace ChatWebAPI.Models
         public string Content { get; set; }
         public bool Sent { get; set; }
         public DateTime Created { get; set; }
-
+        [JsonIgnore]
+        public Contact? Contact { get; set; }
 
     }
 }
