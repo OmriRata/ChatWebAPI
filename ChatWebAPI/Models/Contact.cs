@@ -6,6 +6,7 @@ namespace ChatWebAPI.Models
     public class Contact
     {
         [Key]
+        [JsonIgnore]
         public int ContactId { get; set; }
         public string Id { get; set; } 
         public string? Name { get; set; }
