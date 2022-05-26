@@ -32,7 +32,7 @@ namespace ChatWebAPI.Controllers
             return await _context.Message.ToListAsync();
         }
 
-
+/*
         // GET: api/Message
         [HttpGet("/api/contacts/{id}/messages")]
         public async Task<ActionResult<IEnumerable<Message>>> GetMessageByContact(string id)
@@ -43,10 +43,10 @@ namespace ChatWebAPI.Controllers
             }
             int currentUserID = 2;
 
-            var messages = await _context.Message.Where(x => x.ContactId == id && x.UserId==currentUserID).ToListAsync();
+            //var messages = await _context.Message.Where(x => x.ContactId1 == id && x.UserId==currentUserID).ToListAsync();
 
-            return messages;
-        }
+            return _;
+        }*/
 
 
         // GET: api/Message/5

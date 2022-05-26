@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ChatWebAPI.Migrations
 {
-    public partial class ini : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -57,16 +57,14 @@ namespace ChatWebAPI.Migrations
                     Content = table.Column<string>(type: "TEXT", nullable: false),
                     Sent = table.Column<bool>(type: "INTEGER", nullable: false),
                     Created = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    UserId = table.Column<int>(type: "INTEGER", nullable: false),
-                    ContactId = table.Column<string>(type: "TEXT", nullable: false),
-                    ContactId1 = table.Column<int>(type: "INTEGER", nullable: true)
+                    ContactId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Message", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Message_Contact_ContactId1",
-                        column: x => x.ContactId1,
+                        name: "FK_Message_Contact_ContactId",
+                        column: x => x.ContactId,
                         principalTable: "Contact",
                         principalColumn: "ContactId");
                 });
@@ -77,9 +75,9 @@ namespace ChatWebAPI.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Message_ContactId1",
+                name: "IX_Message_ContactId",
                 table: "Message",
-                column: "ContactId1");
+                column: "ContactId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

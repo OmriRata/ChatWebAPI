@@ -29,7 +29,7 @@ namespace ChatWebAPI.Controllers
             var connected = 1;
 
             if (_context.Contact == null)
-          {
+            {
               return NotFound();
             }
 
@@ -42,11 +42,13 @@ namespace ChatWebAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Contact>> GetContact(string id)
         {
-          if (_context.Contact == null)
+            var connected = 1;
+
+            if (_context.Contact == null)
           {
               return NotFound();
           }
-            var contact = await _context.Contact.Include(x => x.Messages).Where(x => x.Id == id).FirstAsync();
+            var contact = await _context.Contact.Include(x => x.Messages).Where(x => x.Id == id && x.UserId == connected).FirstOrDefaultAsync();
 
             if (contact == null)
             {

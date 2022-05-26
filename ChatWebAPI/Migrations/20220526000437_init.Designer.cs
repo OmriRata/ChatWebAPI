@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ChatWebAPI.Migrations
 {
     [DbContext(typeof(ChatWebAPIContext))]
-    [Migration("20220525215724_ini")]
-    partial class ini
+    [Migration("20220526000437_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -57,11 +57,7 @@ namespace ChatWebAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("ContactId")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int?>("ContactId1")
+                    b.Property<int?>("ContactId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Content")
@@ -74,12 +70,9 @@ namespace ChatWebAPI.Migrations
                     b.Property<bool>("Sent")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("ContactId1");
+                    b.HasIndex("ContactId");
 
                     b.ToTable("Message");
                 });
@@ -122,7 +115,7 @@ namespace ChatWebAPI.Migrations
                 {
                     b.HasOne("ChatWebAPI.Models.Contact", null)
                         .WithMany("Messages")
-                        .HasForeignKey("ContactId1");
+                        .HasForeignKey("ContactId");
                 });
 
             modelBuilder.Entity("ChatWebAPI.Models.Contact", b =>
