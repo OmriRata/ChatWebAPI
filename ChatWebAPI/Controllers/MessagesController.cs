@@ -37,7 +37,7 @@ namespace ChatWebAPI.Controllers
         [HttpGet("/api/contacts/{id}/messages")]
         public async Task<ActionResult<IEnumerable<Message>>> GetMessageByContact(string id)
         {
-            var connectUser = 1;
+            var connectUser = 2;
             if (_context.Message == null)
             {
                 return NotFound();
@@ -58,7 +58,7 @@ namespace ChatWebAPI.Controllers
         [HttpPost("/api/contacts/{id}/messages")]
         public async Task<ActionResult<IEnumerable<Message>>> PostMessageByContact(string id,Message message)
         {
-            var connectUser = 1;
+            var connectUser = 2;
             if (_context.Message == null)
             {
                 return Problem("Entity set 'ChatWebAPIContext.Message'  is null.");
@@ -77,7 +77,7 @@ namespace ChatWebAPI.Controllers
         [HttpGet("/api/contacts/{contact}/messages/{id}")]
         public async Task<ActionResult<Message>> GetMessageByID(string contact,int id)
         {
-            var connectUser = 1;
+            var connectUser = 2;
             if (_context.Message == null)
             {
                 return NotFound();
