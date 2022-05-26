@@ -55,7 +55,7 @@ namespace ChatWebAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("ContactId")
+                    b.Property<int?>("ContactId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Content")
@@ -113,9 +113,7 @@ namespace ChatWebAPI.Migrations
                 {
                     b.HasOne("ChatWebAPI.Models.Contact", "Contact")
                         .WithMany("Messages")
-                        .HasForeignKey("ContactId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ContactId");
 
                     b.Navigation("Contact");
                 });
