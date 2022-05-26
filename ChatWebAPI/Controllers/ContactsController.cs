@@ -30,7 +30,7 @@ namespace ChatWebAPI.Controllers
 
             if (_context.Contact == null)
             {
-              return NotFound();
+                return NotFound();
             }
 
 
@@ -45,9 +45,9 @@ namespace ChatWebAPI.Controllers
             var connected = 1;
 
             if (_context.Contact == null)
-          {
-              return NotFound();
-          }
+            {
+                return NotFound();
+            }
             var contact = await _context.Contact.Include(x => x.Messages).Where(x => x.Id == id && x.UserId == connected).FirstOrDefaultAsync();
 
             if (contact == null)
@@ -111,10 +111,10 @@ namespace ChatWebAPI.Controllers
 
             if (_context.Contact == null)
             {
-              return Problem("Entity set 'ChatWebAPIContext.Contact'  is null.");
+                return Problem("Entity set 'ChatWebAPIContext.Contact'  is null.");
             }
-            var user = _context.User.Include("Contacts").FirstOrDefault(x=>x.Id == ConnectedUser);
-            var userContacts = user.Contacts.ToList().Find( y=>y.Id == contact.Id);
+            var user = _context.User.Include("Contacts").FirstOrDefault(x => x.Id == ConnectedUser);
+            var userContacts = user.Contacts.ToList().Find(y => y.Id == contact.Id);
             if (userContacts != null)
             {
                 return BadRequest();
@@ -130,7 +130,7 @@ namespace ChatWebAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteContact(string id)
         {
-            var ConnectedUser = HttpContext.User.Claims.ElementAt(3).Value;
+            var ConnectedUser = 1;// HttpContext.User.Claims.ElementAt(3).Value;
             if (_context.Contact == null)
             {
                 return NotFound();
@@ -140,8 +140,8 @@ namespace ChatWebAPI.Controllers
             {
                 return NotFound();
             }
-              _context.User.FirstOrDefault(x => x.UserName == ConnectedUser).Contacts.Remove(contactOrig);
-            //_context.Contact.Remove(contact);
+            var contact = await _context.Contact.Include(x => x.Messages).Where(x => x.Id == id && x.UserId == ConnectedUser).FirstOrDefaultAsync();
+            _context.Contact.Remove(contact);
             await _context.SaveChangesAsync();
 
             return NoContent();
