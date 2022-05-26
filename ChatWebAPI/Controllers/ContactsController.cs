@@ -26,7 +26,7 @@ namespace ChatWebAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Contact>>> GetContact()
         {
-            var connected = 1;
+            var connected = 2;
 
             if (_context.Contact == null)
             {
@@ -42,7 +42,7 @@ namespace ChatWebAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Contact>> GetContact(string id)
         {
-            var connected = 1;
+            var connected = 2;
 
             if (_context.Contact == null)
             {
@@ -63,24 +63,31 @@ namespace ChatWebAPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutContact(string id, Contact contact)
         {
+            var connected = 2;
 
             if (_context.Contact == null)
             {
                 return NotFound();
             }
-
+            /*
             if (id != contact.Id)
             {
                 return BadRequest();
+            }*/
+
+            var user = _context.User.Include("Contacts").FirstOrDefault(x => x.Id == connected);
+            var userContacts = user.Contacts.ToList().Find(y => y.Id == id);
+            if (userContacts == null)
+            {
+                return BadRequest();
             }
+            userContacts.Name = contact.Name;
+            userContacts.Server = contact.Server;
+            userContacts.Last= contact.Last;
+            userContacts.Id = contact.Id;
 
-            var contactOrig = await _context.Contact.Where(x => x.Id == id).FirstAsync();
 
-
-            contactOrig.Name = contact.Name;
-
-
-            _context.Entry(contactOrig).State = EntityState.Modified;
+            _context.Entry(userContacts).State = EntityState.Modified;
 
             try
             {
@@ -107,19 +114,20 @@ namespace ChatWebAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Contact>> PostContact(Contact contact)
         {
-            var ConnectedUser = 1;//HttpContext.User.Claims.ElementAt(3).Value;
+            var connected = 2;
+            //HttpContext.User.Claims.ElementAt(3).Value;
 
             if (_context.Contact == null)
             {
                 return Problem("Entity set 'ChatWebAPIContext.Contact'  is null.");
             }
-            var user = _context.User.Include("Contacts").FirstOrDefault(x => x.Id == ConnectedUser);
+            var user = _context.User.Include("Contacts").FirstOrDefault(x => x.Id == connected);
             var userContacts = user.Contacts.ToList().Find(y => y.Id == contact.Id);
             if (userContacts != null)
             {
                 return BadRequest();
             }
-            contact.UserId = ConnectedUser;
+            contact.UserId = connected;
             user.Contacts.Add(contact);
             await _context.SaveChangesAsync();
 
@@ -130,7 +138,8 @@ namespace ChatWebAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteContact(string id)
         {
-            var ConnectedUser = 1;// HttpContext.User.Claims.ElementAt(3).Value;
+            var connected = 2;
+            // HttpContext.User.Claims.ElementAt(3).Value;
             if (_context.Contact == null)
             {
                 return NotFound();
@@ -140,7 +149,11 @@ namespace ChatWebAPI.Controllers
             {
                 return NotFound();
             }
-            var contact = await _context.Contact.Include(x => x.Messages).Where(x => x.Id == id && x.UserId == ConnectedUser).FirstOrDefaultAsync();
+            var contact = await _context.Contact.Include(x => x.Messages).Where(x => x.Id == id && x.UserId == connected).FirstOrDefaultAsync();
+            foreach (var i in contact.Messages)
+            {
+                _context.Message.Remove(i);
+            }
             _context.Contact.Remove(contact);
             await _context.SaveChangesAsync();
 
