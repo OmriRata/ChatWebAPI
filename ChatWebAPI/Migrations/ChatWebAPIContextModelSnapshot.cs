@@ -75,6 +75,22 @@ namespace ChatWebAPI.Migrations
                     b.ToTable("Message");
                 });
 
+            modelBuilder.Entity("ChatWebAPI.Models.Rating", b =>
+                {
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
+
+                    b.Property<double?>("Rate")
+                        .HasColumnType("REAL");
+
+                    b.HasKey("Name");
+
+                    b.ToTable("Rating");
+                });
+
             modelBuilder.Entity("ChatWebAPI.Models.User", b =>
                 {
                     b.Property<int>("Id")
