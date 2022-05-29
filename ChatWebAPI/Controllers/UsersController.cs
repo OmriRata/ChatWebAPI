@@ -123,15 +123,18 @@ namespace ChatWebAPI.Controllers
                 {
                     return Problem("Entity set 'WebAPIContext.User'  is null.");
                 }
-                if (_context.User.Any(e => e.UserName == username && e.Password == password))
+                var user = _context.User.FirstOrDefault(e => e.UserName == username && e.Password == password);
+                if (user != null)
                 {
                     //HttpContext.Session.SetString("userName", UserName);
+                    Console.WriteLine(user.Id);
+
                     var claims = new[]
                     {
                     new Claim(JwtRegisteredClaimNames.Sub,_configuration["JwtParams:Subject"]),
                     new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString()),
                     new Claim(JwtRegisteredClaimNames.Iat,DateTime.UtcNow.ToString()),
-                    new Claim("UserId",username)
+                    new Claim("UserId",user.Id.ToString())
                 };
                     var secretkey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtParams:SecretKey"]));
                     var mac = new SigningCredentials(secretkey, SecurityAlgorithms.HmacSha256);
