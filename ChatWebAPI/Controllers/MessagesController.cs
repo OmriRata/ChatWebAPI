@@ -71,6 +71,10 @@ namespace ChatWebAPI.Controllers
                 return NotFound();
 
             }
+            message.Created = DateTime.UtcNow;
+            contact.LastDate = message.Created;
+            contact.Last = message.Content;
+
             contact.Messages.Add(message);
             await _context.SaveChangesAsync();
             return CreatedAtAction("GetMessage", new { id = message.Id }, message);
