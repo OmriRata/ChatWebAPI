@@ -20,6 +20,7 @@ namespace ChatWebAPI.Data
         public DbSet<ChatWebAPI.Models.Contact>? Contact { get; set; }
 
         public DbSet<ChatWebAPI.Models.Message>? Message { get; set; }
+        public DbSet<ChatWebAPI.Models.Rating>? Rating { get; set; }
 
 
     }
