@@ -46,7 +46,6 @@ namespace ChatWebAPI.Controllers
             {
                 return NotFound();
             }
-            Console.WriteLine(user);
             var userContacts = user.Contacts.ToList().Any(x=>x.Id == invitation.From);
             if (userContacts)
             {

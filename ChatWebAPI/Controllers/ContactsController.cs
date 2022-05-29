@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace ChatWebAPI.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ContactsController : ControllerBase
@@ -26,7 +27,7 @@ namespace ChatWebAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Contact>>> GetContact()
         {
-            var connected = 2;
+            var connected = Int32.Parse(HttpContext.User.Claims.ElementAt(3).Value);
 
             if (_context.Contact == null)
             {
@@ -42,7 +43,7 @@ namespace ChatWebAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Contact>> GetContact(string id)
         {
-            var connected = 2;
+            var connected = Int32.Parse(HttpContext.User.Claims.ElementAt(3).Value);
 
             if (_context.Contact == null)
             {
@@ -63,7 +64,7 @@ namespace ChatWebAPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutContact(string id, Contact contact)
         {
-            var connected = 2;
+            var connected = Int32.Parse(HttpContext.User.Claims.ElementAt(3).Value);
 
             if (_context.Contact == null)
             {
@@ -114,8 +115,7 @@ namespace ChatWebAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Contact>> PostContact(Contact contact)
         {
-            var connected = 2;
-            //HttpContext.User.Claims.ElementAt(3).Value;
+            var connected = Int32.Parse(HttpContext.User.Claims.ElementAt(3).Value);
 
             if (_context.Contact == null)
             {
@@ -138,8 +138,7 @@ namespace ChatWebAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteContact(string id)
         {
-            var connected = 2;
-            // HttpContext.User.Claims.ElementAt(3).Value;
+            var connected = Int32.Parse(HttpContext.User.Claims.ElementAt(3).Value);
             if (_context.Contact == null)
             {
                 return NotFound();

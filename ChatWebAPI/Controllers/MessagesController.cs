@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ChatWebAPI.Data;
 using ChatWebAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ChatWebAPI.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class MessagesController : ControllerBase
@@ -37,7 +39,7 @@ namespace ChatWebAPI.Controllers
         [HttpGet("/api/contacts/{id}/messages")]
         public async Task<ActionResult<IEnumerable<Message>>> GetMessageByContact(string id)
         {
-            var connectUser = 2;
+            var connectUser = Int32.Parse(HttpContext.User.Claims.ElementAt(3).Value);
             if (_context.Message == null)
             {
                 return NotFound();
@@ -58,7 +60,7 @@ namespace ChatWebAPI.Controllers
         [HttpPost("/api/contacts/{id}/messages")]
         public async Task<ActionResult<IEnumerable<Message>>> PostMessageByContact(string id,Message message)
         {
-            var connectUser = 2;
+            var connectUser = Int32.Parse(HttpContext.User.Claims.ElementAt(3).Value);
             if (_context.Message == null)
             {
                 return Problem("Entity set 'ChatWebAPIContext.Message'  is null.");
@@ -77,7 +79,7 @@ namespace ChatWebAPI.Controllers
         [HttpGet("/api/contacts/{contact}/messages/{id}")]
         public async Task<ActionResult<Message>> GetMessageByID(string contact,int id)
         {
-            var connectUser = 2;
+            var connectUser = Int32.Parse(HttpContext.User.Claims.ElementAt(3).Value);
             if (_context.Message == null)
             {
                 return NotFound();
@@ -104,7 +106,7 @@ namespace ChatWebAPI.Controllers
         [HttpPut("/api/contacts/{contact}/messages/{id}")]
         public async Task<IActionResult> PutMessage(string contact, int id, Message message)
         {
-            var connectUser = 2;
+            var connectUser = Int32.Parse(HttpContext.User.Claims.ElementAt(3).Value);
             if (id != message.Id)
             {
                 return BadRequest();
@@ -146,7 +148,7 @@ namespace ChatWebAPI.Controllers
         [HttpDelete("/api/contacts/{contact}/messages/{id}")]
         public async Task<IActionResult> DeleteMessage(string contact, int id)
         {
-            var connectUser = 2;
+            var connectUser = Int32.Parse(HttpContext.User.Claims.ElementAt(3).Value);
 
             if (_context.Message == null)
             {

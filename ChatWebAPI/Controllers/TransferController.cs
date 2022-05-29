@@ -37,6 +37,7 @@ namespace ChatWebAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<IEnumerable<Transfer>>> PostTransfer(Transfer transfer)
         {
+            var ConnectedUser = Int32.Parse(HttpContext.User.Claims.ElementAt(3).Value);
             if (_context.User == null)
             {
                 return NotFound();
