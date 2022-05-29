@@ -101,12 +101,14 @@ namespace ChatWebAPI.Controllers
         // POST: api/User
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<User>> PostUser(User user)
+        public async Task<ActionResult<User>> PostUser(string username, string nickname, string password)
         {
+            var isExist = _context.User.Any(x => x.UserName == username);
           if (_context.User == null)
           {
               return Problem("Entity set 'ChatWebAPIContext.User'  is null.");
           }
+            User user = new User() { UserName = username, NickName = nickname, Password = password };
             _context.User.Add(user);
             await _context.SaveChangesAsync();
 
