@@ -35,7 +35,7 @@ namespace ChatWebAPI.Controllers
         // GET: api/User
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUser()
-        {
+         {
           if (_context.User == null)
           {
               return NotFound();

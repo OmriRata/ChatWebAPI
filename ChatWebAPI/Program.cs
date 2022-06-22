@@ -6,7 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Pomelo.EntityFrameworkCore.MySql;
 using System.Text.Json.Serialization;
-
+using ChatWebAPI.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 //var connectionString = "server=localhost;user=root;password=;database=ef";
@@ -23,6 +23,7 @@ builder.Services.AddDbContext<ChatWebAPIContext>(options =>
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddSignalR();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -73,12 +74,17 @@ if (app.Environment.IsDevelopment())
 //app.UseHttpsRedirection();
 //app.UseSession();
 app.UseCors("Allow All");
+app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.MapControllers();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHub<MessageHub>("/messageHub");
+    endpoints.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Rating}/{action=Index}/{id?}");
+});
 
 app.Run();

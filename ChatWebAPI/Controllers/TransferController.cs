@@ -52,13 +52,14 @@ namespace ChatWebAPI.Controllers
             {
                 return BadRequest();
             }
-            Message message = new Message() {Content=transfer.Content,Sent=true,Created=DateTime.UtcNow};
+            Message message = new Message() {Content=transfer.Content,Sent=false,Created=DateTime.UtcNow};
             var contact = _context.Contact.Include(x => x.Messages).FirstOrDefault(c => c.User.UserName == transfer.To && c.Id == transfer.From);
             contact.Messages.Add(message);
             contact.LastDate = message.Created;
             contact.Last = message.Content;
 
             await _context.SaveChangesAsync();
+
             //var ConnectedUser = HttpContext.User.Claims.ElementAt(3).Value;
             //HttpContext.User.Claims.
             //return await _context.Contact.Include(x => x.Messages).ToListAsync();
